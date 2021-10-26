@@ -1,0 +1,16 @@
+defmodule ElixirHeat.Messages.Create do
+  alias ElixirHeat.{Message, Repo}
+
+  def call(params) do
+    params
+    |> Message.changeset()
+    |> Repo.insert()
+    |> handle_insert()
+  end
+
+  defp handle_insert({:ok, %Message{}} = result), do: result
+
+  defp handle_insert({:error, reason}) do
+    {:error, %{reason: reason, status: :bad_request}}
+  end
+end
